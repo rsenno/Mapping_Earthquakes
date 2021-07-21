@@ -35,40 +35,45 @@ let secondary_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{
 // Create a base layer that holds both maps. 
 let baseMaps = {
   'Streets': default_layer,
-  'Satellite Streets': secondary_layer
+  'Satellite': secondary_layer
 };
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
-  center: [43.7, -79.3],
-  zoom: 11,
+  center: [39.5, -98.5],
+  zoom: 3,
   layers: [default_layer]
 })
 // Pass our map layers into our layers control and add the layers control to the map.
-L.control.layers(baseMaps).addTo(map);
+// L.control.layers(baseMaps).addTo(map);
 
 // Having the tileLayer() method before accessing large datasets ensures that the map gets loaded before the data is added to it.
 // Accessing the Toronto neighborhoods GeoJSON URL.
-let torontoHoods = "https://raw.githubusercontent.com/rsenno/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/torontoNeighborhoods.json";
+// let torontoHoods = "https://raw.githubusercontent.com/rsenno/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/torontoNeighborhoods.json";
 
 // We'll create a style specification outside of the geoJSON as an alternative to inserting it in the geooJSON call
-let myStyle = {
-  fillColor: "#ffffa1",
-  // fillcolor: "yellow",
-  color: "blue",
-  weight: 1,
-  fillOpacity: 0.2
-}
-// Grabbing our GeoJSON data.
-d3.json(torontoHoods).then(function(data) {
-  console.log(data);
+// let myStyle = {
+//   fillColor: "#ffffa1",
+//   // fillcolor: "yellow",
+//   color: "blue",
+//   weight: 1,
+//   fillOpacity: 0.2
+// }
+// // Grabbing our GeoJSON data.
+// d3.json(torontoHoods).then(function(data) {
+//   console.log(data);
+//   // Creating a GeoJSON layer with the retrieved data.
+//   // L.geoJSON(data).addTo(map);
+//   L.geoJSON(data, {
+//     style: myStyle,
+//     onEachFeature: function(feature, layer) {
+//       layer.bindPopup("<h2> Neighborhood: " + feature.properties.AREA_NAME + "</h2> <hr> <h2> Area S Code: " + feature.properties.AREA_S_CD + "</h2>");
+//     }
+//   }).addTo(map);
+// });
+// Retrieve the earthquake GeoJSON data.
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
   // Creating a GeoJSON layer with the retrieved data.
-  // L.geoJSON(data).addTo(map);
-  L.geoJSON(data, {
-    style: myStyle,
-    onEachFeature: function(feature, layer) {
-      layer.bindPopup("<h2> Neighborhood: " + feature.properties.AREA_NAME + "</h2> <hr> <h2> Area S Code: " + feature.properties.AREA_S_CD + "</h2>");
-    }
-  }).addTo(map);
+  L.geoJson(data).addTo(map);
 });
 
 
